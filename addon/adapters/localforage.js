@@ -3,6 +3,8 @@ import DS from 'ember-data';
 import LFQueue from 'ember-localforage-adapter/utils/queue';
 import LFCache from 'ember-localforage-adapter/utils/cache';
 
+const IN_PROGRESS_MESSAGE = '[ember-data-offline] localforage in progress';
+
 export default DS.Adapter.extend({
   defaultSerializer: 'localforage',
   queue: null,
@@ -182,7 +184,7 @@ export default DS.Adapter.extend({
         var toBePersisted = localStorageData;
 
         if (window.isPersisting) {
-          return reject('localforage in progress');
+          return reject({type: 'ember-localforage-adapter error', message: IN_PROGRESS_MESSAGE});
         }
 
         window.isPersisting = true;
